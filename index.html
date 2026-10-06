@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infographic: Mannitol vs. HTS for Raised ICP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .flowchart-box {
+            border: 2px solid #3A6EA5;
+            background-color: #ffffff;
+            color: #001219;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .flowchart-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #3A6EA5;
+            margin: 0.5rem 0;
+        }
+         .flowchart-line {
+            width: 2px;
+            background-color: #3A6EA5;
+            margin: 0 auto;
+        }
+        .flowchart-connector-horizontal {
+            height: 2px;
+            background-color: #3A6EA5;
+        }
+    </style>
+</head>
+<body class="bg-[#FBF9F0] text-[#001219]">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-6xl font-black text-[#004E98] mb-2">The Critical Choice in Raised ICP</h1>
+            <p class="text-lg md:text-xl text-[#3A6EA5] max-w-4xl mx-auto">A visual guide for UK Emergency Medicine clinicians comparing Mannitol and Hypertonic Saline (HTS) for the management of raised intracranial pressure.</p>
+        </header>
+
+        <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <div class="md:col-span-2 lg:col-span-3 bg-white rounded-lg shadow-xl p-6 flex flex-col md:flex-row items-center justify-around text-center">
+                <div class="mb-6 md:mb-0">
+                    <p class="text-7xl font-black text-[#F79256]">2.5x</p>
+                    <p class="text-lg text-[#3A6EA5] mt-1">Increased mortality risk in TBI with a single episode of hypotension (SBP <90mmHg).</p>
+                </div>
+                <div class="w-px bg-gray-300 self-stretch hidden md:block mx-8"></div>
+                <div class="mb-6 md:mb-0">
+                    <p class="text-7xl font-black text-[#004E98]">>60<span class="text-4xl align-top">mmHg</span></p>
+                    <p class="text-lg text-[#3A6EA5] mt-1">Target Cerebral Perfusion Pressure (CPP) to prevent secondary brain injury.</p>
+                </div>
+                 <div class="w-px bg-gray-300 self-stretch hidden md:block mx-8"></div>
+                <div >
+                    <p class="text-7xl font-black text-[#F79256]">HTS</p>
+                    <p class="text-lg text-[#3A6EA5] mt-1">The haemodynamically superior choice for supporting CPP.</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-[#004E98] mb-4">Core Mechanism: Reflection Coefficient (σ)</h2>
+                <p class="text-gray-600 mb-4">A higher reflection coefficient means the agent is less permeable across the Blood-Brain Barrier (BBB), creating a more potent and reliable osmotic gradient. This is key to drawing water out of the brain.</p>
+                <div class="flex justify-around text-center">
+                    <div>
+                        <p class="text-6xl font-bold text-[#F79256]">0.9</p>
+                        <p class="font-semibold text-lg">Mannitol</p>
+                        <p class="text-sm text-gray-500">Can leak across a damaged BBB, risking rebound ICP.</p>
+                    </div>
+                    <div>
+                        <p class="text-6xl font-bold text-[#004E98]">1.0</p>
+                        <p class="font-semibold text-lg">Hypertonic Saline</p>
+                        <p class="text-sm text-gray-500">Highly impermeable, ensuring a stable osmotic gradient.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                 <h2 class="text-2xl font-bold text-[#004E98] mb-4">Patient Suitability: The Consensus</h2>
+                <p class="text-gray-600 mb-4">Evidence and physiological principles strongly favour HTS in the majority of acute scenarios encountered in the ED. Mannitol remains an alternative where HTS is contraindicated.</p>
+                <div class="chart-container h-64">
+                    <canvas id="suitabilityChart"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-[#004E98] mb-4">Impact on Cerebral Perfusion Pressure (CPP)</h2>
+                <p class="text-gray-600 mb-4">CPP is the net pressure gradient causing cerebral blood flow to the brain. HTS actively supports CPP by raising Mean Arterial Pressure (MAP), while Mannitol can compromise it via diuresis-induced hypotension.</p>
+                 <div class="chart-container h-64">
+                    <canvas id="cppImpactChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="md:col-span-2 lg:col-span-3 bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-center text-[#004E98] mb-4">Divergent Pathways: Haemodynamic Effects</h2>
+                <p class="text-gray-600 mb-6 text-center max-w-3xl mx-auto">This flowchart illustrates the critical difference in how each agent impacts systemic circulation and cerebral perfusion. HTS provides synergistic support, while Mannitol introduces a conflicting risk.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                    <div>
+                        <div class="flowchart-box bg-[#F79256] text-white">Mannitol Infusion</div>
+                        <div class="flowchart-arrow">↓</div>
+                        <div class="flowchart-box">Phase 1: Transient Plasma Expansion & Rheology Improvement</div>
+                        <div class="flowchart-arrow">↓</div>
+                        <div class="flowchart-box">Phase 2: Profound Osmotic Diuresis</div>
+                        <div class="flowchart-arrow">↓</div>
+                        <div class="flowchart-box border-red-500 text-red-700">Risk of Hypovolemia & Hypotension</div>
+                        <div class="flowchart-arrow text-red-500">↓</div>
+                        <div class="flowchart-box bg-red-100 text-red-700 font-bold">Decreased CPP</div>
+                    </div>
+                     <div>
+                        <div class="flowchart-box bg-[#004E98] text-white">Hypertonic Saline Infusion</div>
+                        <div class="flowchart-arrow">↓</div>
+                        <div class="flowchart-box">Sustained Plasma Volume Expansion</div>
+                         <div class="flowchart-arrow">↓</div>
+                        <div class="flowchart-box">Increased Mean Arterial Pressure (MAP)</div>
+                         <div class="flowchart-arrow">↓</div>
+                        <div class="flowchart-box border-green-500 text-green-700">No Obligatory Diuresis</div>
+                         <div class="flowchart-arrow text-green-500">↓</div>
+                        <div class="flowchart-box bg-green-100 text-green-700 font-bold">Increased CPP</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md:col-span-2 bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-[#004E98] mb-4">Efficacy: ICP Reduction Over Time</h2>
+                <p class="text-gray-600 mb-4">While both agents lower ICP rapidly, evidence suggests HTS provides a more durable reduction. Mannitol carries a risk of rebound ICP as it eventually leaks across a damaged BBB, reversing the osmotic gradient.</p>
+                <div class="chart-container">
+                    <canvas id="icpEfficacyChart"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-[#004E98] mb-4">Safety Profile: Key Risks</h2>
+                <p class="text-gray-600 mb-4">The safety concerns for each agent are distinct. Mannitol's primary risks are haemodynamic and renal, while HTS requires careful metabolic monitoring.</p>
+                <div class="space-y-4">
+                    <div class="text-center">
+                        <p class="font-semibold text-[#F79256]">Mannitol</p>
+                        <p>🚨 Hypotension</p>
+                        <p>💧 Acute Kidney Injury (AKI)</p>
+                        <p>📈 Rebound ICP</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="font-semibold text-[#004E98]">Hypertonic Saline</p>
+                        <p>🧂 Hypernatremia</p>
+                        <p>🧪 Hyperchloremic Acidosis</p>
+                        <p>❤️ Caution in severe CHF</p>
+                    </div>
+                </div>
+                 <p class="text-xs text-center text-gray-500 mt-4">Risk of ODS with HTS is exceedingly low in normonatremic patients and is associated with rapid correction of chronic hyponatremia.</p>
+            </div>
+
+            <div class="md:col-span-2 lg:col-span-3 bg-white rounded-lg shadow-lg p-6">
+                 <h2 class="text-2xl font-bold text-center text-[#004E98] mb-4">UK Practice Pathway: A Decision Framework</h2>
+                 <p class="text-gray-600 mb-6 text-center max-w-3xl mx-auto">This algorithm provides a simplified, evidence-based approach to choosing an agent in the ED, prioritizing haemodynamic stability and patient safety.</p>
+                
+                <div class="flowchart-box max-w-md mx-auto">Patient with signs of raised ICP (e.g. deteriorating GCS, new pupillary changes)</div>
+                <div class="flowchart-arrow h-10 flowchart-line"></div>
+                <div class="flowchart-box max-w-md mx-auto">Initiate basic neuroprotective measures (Head up 30°, midline, normoxia, normocapnia)</div>
+                 <div class="flowchart-arrow h-10 flowchart-line"></div>
+
+                <div class="flex justify-center items-center">
+                    <div class="flex-grow flowchart-connector-horizontal"></div>
+                    <div class="text-xl px-4 font-bold text-[#3A6EA5]">Assess Haemodynamics</div>
+                    <div class="flex-grow flowchart-connector-horizontal"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div class="relative p-4">
+                        <div class="flowchart-arrow h-10 flowchart-line"></div>
+                        <div class="flowchart-box border-red-500">Hypotensive (SBP <90) OR Polytrauma</div>
+                        <div class="flowchart-arrow h-10 flowchart-line text-red-500"></div>
+                        <div class="flowchart-box bg-green-100 font-bold text-green-800">1st Line: Hypertonic Saline</div>
+                         <p class="text-center mt-2 text-sm text-gray-600">Supports MAP & CPP. Mannitol is relatively contraindicated.</p>
+                    </div>
+                    <div class="relative p-4">
+                        <div class="flowchart-arrow h-10 flowchart-line"></div>
+                        <div class="flowchart-box border-green-500">Normotensive</div>
+                        <div class="flowchart-arrow h-10 flowchart-line text-green-500"></div>
+                         <div class="flowchart-box bg-green-100 font-bold text-green-800">Preferred: Hypertonic Saline</div>
+                        <p class="text-center mt-2 text-sm text-gray-600">Superior CPP augmentation, sustained ICP control, and better renal safety profile.</p>
+                        <p class="text-center mt-2 text-sm text-gray-500">Alternative: Mannitol (if HTS unavailable/contraindicated, ensure euvolemia).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-2xl font-bold text-[#F79256] mb-4">Mannitol: Admin Checklist</h2>
+                    <ul class="space-y-3">
+                        <li class="flex items-start"><span class="text-2xl mr-3">✅</span> <div><span class="font-bold">Dose:</span> 0.25-1 g/kg (20% solution)</div></li>
+                        <li class="flex items-start"><span class="text-2xl mr-3">🔬</span> <div><span class="font-bold">Filter:</span> MUST use an in-line 5-micron filter.</div></li>
+                        <li class="flex items-start"><span class="text-2xl mr-3">❄️</span> <div><span class="font-bold">Crystals:</span> Inspect and warm to re-dissolve if present.</div></li>
+                        <li class="flex items-start"><span class="text-2xl mr-3">💧</span> <div><span class="font-bold">Monitor:</span> Serum osmolality (<320 mOsm/L), renal function, and fluid balance. Prepare for diuresis.</div></li>
+                    </ul>
+                </div>
+                 <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-2xl font-bold text-[#004E98] mb-4">HTS: Admin Checklist</h2>
+                    <ul class="space-y-3">
+                        <li class="flex items-start"><span class="text-2xl mr-3">✅</span> <div><span class="font-bold">Dose:</span> 2-5 ml/kg (3% or 2.7% solution)</div></li>
+                        <li class="flex items-start"><span class="text-2xl mr-3">💉</span> <div><span class="font-bold">Control:</span> MUST administer via a syringe driver. NEVER free-flow.</div></li>
+                        <li class="flex items-start"><span class="text-2xl mr-3">🏥</span> <div><span class="font-bold">Route:</span> Central line preferred, can use large bore peripheral line in an emergency.</div></li>
+                        <li class="flex items-start"><span class="text-2xl mr-3">🧂</span> <div><span class="font-bold">Monitor:</span> Serum sodium (Target 145-155, alert >160 mmol/L), acid-base status.</div></li>
+                    </ul>
+                </div>
+            </div>
+
+        </main>
+        
+        <footer class="text-center mt-12 text-sm text-gray-500">
+            <p>This infographic is a clinical decision support tool based on current evidence and is not a substitute for professional clinical judgment. All data is synthesized for educational purposes.</p>
+            <p class="mt-2">Developed for UK Emergency Medicine Clinicians. No SVG or Mermaid JS used in this document.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const FONT_COLOR = '#001219';
+            const GRID_COLOR = '#C1D4D9';
+            const MANNITOL_COLOR = '#F79256';
+            const HTS_COLOR = '#004E98';
+            const HTS_LIGHT_COLOR = '#3A6EA5';
+
+            const wrapLabel = (str, maxWidth) => {
+                if (str.length <= maxWidth) {
+                    return str;
+                }
+                const words = str.split(' ');
+                let lines = [];
+                let currentLine = words[0];
+
+                for (let i = 1; i < words.length; i++) {
+                    if (currentLine.length + words[i].length + 1 < maxWidth) {
+                        currentLine += ' ' + words[i];
+                    } else {
+                        lines.push(currentLine);
+                        currentLine = words[i];
+                    }
+                }
+                lines.push(currentLine);
+                return lines;
+            };
+            
+            const tooltipTitleCallback = {
+                 plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                if (Array.isArray(label)) {
+                                  return label.join(' ');
+                                } else {
+                                  return label;
+                                }
+                            }
+                        }
+                    },
+                    legend: {
+                        labels: {
+                            color: FONT_COLOR
+                        }
+                    }
+                }
+            };
+            
+            const commonChartOptions = {
+                maintainAspectRatio: false,
+                responsive: true,
+                ...tooltipTitleCallback,
+                 scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: FONT_COLOR },
+                        grid: { color: GRID_COLOR }
+                    },
+                    x: {
+                        ticks: { color: FONT_COLOR },
+                        grid: { display: false }
+                    }
+                }
+            };
+
+            const suitabilityCtx = document.getElementById('suitabilityChart');
+            if(suitabilityCtx) {
+                new Chart(suitabilityCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['HTS Recommended (e.g. Hypotensive, Renal Impairment)', 'Mannitol as an Alternative'],
+                        datasets: [{
+                            label: 'Patient Suitability',
+                            data: [85, 15],
+                            backgroundColor: [HTS_COLOR, MANNITOL_COLOR],
+                            borderColor: '#FBF9F0',
+                            borderWidth: 4
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                         plugins: {
+                            tooltip: tooltipTitleCallback.plugins.tooltip,
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: FONT_COLOR,
+                                    boxWidth: 20,
+                                    padding: 20,
+                                    generateLabels: function(chart) {
+                                        const data = chart.data;
+                                        if (data.labels.length && data.datasets.length) {
+                                            return data.labels.map(function(label, i) {
+                                                const meta = chart.getDatasetMeta(0);
+                                                const ds = data.datasets[0];
+                                                const arc = meta.data[i];
+                                                const fill = ds.backgroundColor[i];
+                                                return {
+                                                    text: wrapLabel(label, 25).join('\n'),
+                                                    fillStyle: fill,
+                                                    strokeStyle: fill,
+                                                    lineWidth: 2,
+                                                    hidden: isNaN(ds.data[i]) || meta.hidden,
+                                                    index: i
+                                                };
+                                            });
+                                        }
+                                        return [];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const cppImpactCtx = document.getElementById('cppImpactChart');
+            if (cppImpactCtx) {
+                new Chart(cppImpactCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Mannitol', 'Hypertonic Saline'],
+                        datasets: [{
+                            label: 'Change in CPP (Illustrative)',
+                            data: [-5, 15],
+                            backgroundColor: [MANNITOL_COLOR, HTS_COLOR],
+                            borderColor: [MANNITOL_COLOR, HTS_COLOR],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        ...commonChartOptions,
+                        scales: {
+                            y: {
+                                ticks: { 
+                                    color: FONT_COLOR,
+                                    callback: function(value) { return value + ' mmHg' }
+                                },
+                                grid: { color: GRID_COLOR },
+                                title: { display: true, text: 'Change in CPP', color: FONT_COLOR }
+                            },
+                             x: { ticks: { color: FONT_COLOR }, grid: { display: false } }
+                        }
+                    }
+                });
+            }
+
+            const icpEfficacyCtx = document.getElementById('icpEfficacyChart');
+            if (icpEfficacyCtx) {
+                new Chart(icpEfficacyCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Baseline', '30-60 min', '90-120 min'],
+                        datasets: [{
+                            label: 'Mannitol',
+                            data: [100, 45, 65],
+                            borderColor: MANNITOL_COLOR,
+                            backgroundColor: MANNITOL_COLOR + '33',
+                            fill: true,
+                            tension: 0.1
+                        }, {
+                            label: 'Hypertonic Saline',
+                            data: [100, 40, 35],
+                            borderColor: HTS_COLOR,
+                            backgroundColor: HTS_COLOR + '33',
+                            fill: true,
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                       ...commonChartOptions,
+                       scales: {
+                            y: {
+                                ticks: { 
+                                    color: FONT_COLOR,
+                                    callback: function(value) { return value + '%' }
+                                },
+                                grid: { color: GRID_COLOR },
+                                title: { display: true, text: 'Relative ICP (%)', color: FONT_COLOR }
+                            },
+                             x: { ticks: { color: FONT_COLOR }, grid: { display: false } }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
